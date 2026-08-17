@@ -20,6 +20,10 @@ classifiers = [
 dependencies = []
 
 [project.urls]
+Homepage = "https://meddeid.github.io/"
+Documentation = "https://meddeid.github.io/concepts/data-contract/"
+Source = "https://github.com/stighellemans/meddeid-core"
+Issues = "https://github.com/stighellemans/meddeid-core/issues"
 "MedDeID on Hugging Face" = "https://huggingface.co/collections/stighellemans/meddeid"
 
 [project.optional-dependencies]
