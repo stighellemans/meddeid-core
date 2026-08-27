@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meddeid-core"
-version = "0.1.1"
+version = "0.2.0"
 description = "Language-neutral schema, taxonomy, and span contracts for MedDeID"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -36,6 +36,9 @@ meddeid-normalize-jsonl = "meddeid_core.normalize_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+meddeid_core = ["resources/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

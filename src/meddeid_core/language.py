@@ -3,25 +3,53 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Literal, Protocol
+
+from .age_policy import AgeGranularityPolicy
 
 PostProcessor = Callable[..., list[dict[str, Any]]]
 LookupCategories = Callable[[], tuple[str, ...]]
 LookupValues = Callable[[str], tuple[str, ...]]
 ResourceManifest = Callable[[], dict[str, Any]]
 CapabilityManifest = Callable[[], dict[str, Any]]
+DateReplacementKind = Literal["shifted_date", "age_generalized", "year_fallback"]
+
+
+@dataclass(frozen=True)
+class DateReplacement:
+    body: str
+    kind: DateReplacementKind
+
+
+class DateReplacementProvider(Protocol):
+    def __call__(
+        self,
+        text: str,
+        *,
+        label: str,
+        date_shift_days: int,
+        context_before: str,
+        context_after: str,
+        document_creation_date: str | None,
+        age_granularity_policy: AgeGranularityPolicy,
+    ) -> DateReplacement | None: ...
+
+
+class BirthDateVariantsProvider(Protocol):
+    def __call__(self, value: str) -> tuple[str, ...]: ...
 
 
 @dataclass(frozen=True)
 class LanguageProfile:
     profile_id: str
-    version: str
     language_tags: tuple[str, ...]
     post_process_spans: PostProcessor
     lookup_categories_provider: LookupCategories | None = None
     lookup_values_provider: LookupValues | None = None
     resource_manifest_provider: ResourceManifest | None = None
     capability_manifest_provider: CapabilityManifest | None = None
+    date_replacement_provider: DateReplacementProvider | None = None
+    birth_date_variants_provider: BirthDateVariantsProvider | None = None
 
     def accepts_language(self, language_tag: str) -> bool:
         normalized = language_tag.strip().replace("_", "-").lower()
@@ -45,10 +73,39 @@ class LanguageProfile:
             raise KeyError(f"profile {self.profile_id!r} provides no lookup resources")
         return self.lookup_values_provider(category)
 
+    def replace_date(
+        self,
+        text: str,
+        *,
+        label: str,
+        date_shift_days: int,
+        context_before: str,
+        context_after: str,
+        document_creation_date: str | None,
+        age_granularity_policy: AgeGranularityPolicy,
+    ) -> DateReplacement | None:
+        if self.date_replacement_provider is None:
+            return None
+        return self.date_replacement_provider(
+            text,
+            label=label,
+            date_shift_days=date_shift_days,
+            context_before=context_before,
+            context_after=context_after,
+            document_creation_date=document_creation_date,
+            age_granularity_policy=age_granularity_policy,
+        )
+
+    def birth_date_variants(self, value: str) -> tuple[str, ...]:
+        if self.birth_date_variants_provider is None:
+            raise ValueError(
+                f"language profile {self.profile_id!r} does not support patient.birth_date"
+            )
+        return self.birth_date_variants_provider(value)
+
     def manifest(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "profile_id": self.profile_id,
-            "profile_version": self.version,
             "language_tags": list(self.language_tags),
         }
         if self.resource_manifest_provider is not None:
@@ -62,10 +119,6 @@ class LanguageProfile:
                 if capability.get("profile_id", self.profile_id) != self.profile_id:
                     raise RuntimeError(
                         f"language capability {name!r} is scoped to another profile"
-                    )
-                if str(capability.get("profile_version", self.version)) != self.version:
-                    raise RuntimeError(
-                        f"language capability {name!r} has another profile version"
                     )
             payload["capabilities"] = capabilities
         return payload

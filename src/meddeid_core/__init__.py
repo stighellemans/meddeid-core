@@ -11,8 +11,27 @@ Typed layer (requires pydantic>=2):
 
 from __future__ import annotations
 
-from . import artifacts, language, normalize, taxonomy, validate
-from .language import LanguageProfile
+from . import age_policy, artifacts, language, normalize, onboarding, taxonomy, validate
+from .age_policy import (
+    AGE_POLICY_SCHEMA_VERSION,
+    AgeGranularityPolicy,
+    AgePart,
+    AgePolicyIdentity,
+    load_age_granularity_policy,
+)
+from .language import DateReplacement, LanguageProfile
+from .onboarding import (
+    ATTEMPT_RECORD_CONTRACT,
+    BATCH_MANIFEST_CONTRACT,
+    GENERATION_TARGET_CONTRACT,
+    PROFILE_REF_CONTRACT,
+    REVIEW_DECISION_CONTRACT,
+    AttemptRecord,
+    BatchManifest,
+    GenerationTarget,
+    ProfileRef,
+    ReviewDecision,
+)
 from .artifacts import (
     ARTIFACT_MANIFEST_VERSION,
     OFFSET_UNIT,
@@ -45,9 +64,27 @@ from .validate import is_valid, validate_record
 
 __all__ = [
     "taxonomy",
+    "age_policy",
     "artifacts",
     "language",
+    "onboarding",
     "LanguageProfile",
+    "DateReplacement",
+    "ProfileRef",
+    "GenerationTarget",
+    "AttemptRecord",
+    "ReviewDecision",
+    "BatchManifest",
+    "PROFILE_REF_CONTRACT",
+    "GENERATION_TARGET_CONTRACT",
+    "ATTEMPT_RECORD_CONTRACT",
+    "REVIEW_DECISION_CONTRACT",
+    "BATCH_MANIFEST_CONTRACT",
+    "AgePart",
+    "AgePolicyIdentity",
+    "AgeGranularityPolicy",
+    "AGE_POLICY_SCHEMA_VERSION",
+    "load_age_granularity_policy",
     "normalize",
     "validate",
     "normalize_obj",
@@ -102,4 +139,4 @@ try:  # pragma: no cover
 except ImportError:  # pydantic not installed — core still works
     pass
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"

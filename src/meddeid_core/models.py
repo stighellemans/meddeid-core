@@ -44,6 +44,10 @@ class Span(_Base):
     label: str = Field(description="Full label: 'Category' or 'Category:Subtype'.")
     category: str | None = Field(default=None, description="Top-level category.")
     subtype: str | None = Field(default=None, description="Subtype, or null.")
+    replacement: str | None = Field(
+        default=None,
+        description="Exact bracketed text used when rendering this inference span.",
+    )
     subannotations: list[Subannotation] = Field(
         default_factory=list,
         description="Confirmed benchmark segments owned by this primary span.",
@@ -85,7 +89,10 @@ class Span(_Base):
 class Patient(_Base):
     given_name: str | None = None
     family_name: str | None = None
-    birth_date: str | None = None
+    birth_date: str | None = Field(
+        default=None,
+        description="Trusted full birth date used for locale-aware span recovery.",
+    )
 
 
 class Caregiver(_Base):
@@ -127,8 +134,14 @@ class KnownValue(_Base):
 
 class DocumentMetadata(_Base):
     lang: str | None = None
-    document_creation_date: str | None = None
-    date_shift_days: int | None = None
+    document_creation_date: str | None = Field(
+        default=None,
+        description="Reference date used to convert birthdates to generalized ages.",
+    )
+    date_shift_days: int | None = Field(
+        default=None,
+        description="Explicit date shift in days; omit or use zero for placeholders.",
+    )
     patient: Patient | None = None
     caregivers: list[Caregiver] | None = None
     known_values: list[KnownValue] | None = Field(
@@ -161,7 +174,9 @@ class Document(_Base):
     spans: list[Span] = Field(default_factory=list)
     deid_text: str | None = None  # optional-where-it-exists (D6)
     metadata: DocumentMetadata | None = None
-    # extras allowed: annotated, status, warnings, source_dataset, ...
+    warnings: list[dict[str, str]] = Field(default_factory=list)
+    processing: dict[str, Any] = Field(default_factory=dict)
+    # extras allowed: annotated, status, source_dataset, ...
 
     @model_validator(mode="before")
     @classmethod

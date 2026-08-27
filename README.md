@@ -32,6 +32,12 @@ validate_record(record)
 MedDeID uses half-open `[begin, end)` offsets measured in Unicode code points.
 The only canonical top-level span container is `spans`.
 
+The core package also owns the language-neutral
+`meddeid.age-granularity.v1` JSON contract. `load_age_granularity_policy()`
+loads the packaged default, a custom JSON path, or a mapping and returns its
+validated calendar generalizer and deterministic identity. Language packages
+remain responsible only for parsing and localized rendering.
+
 Benchmark subannotations are nested under their parent primary span. A non-empty
 subannotation list must be a complete, contiguous partition of the parent, and
 all offsets remain absolute document offsets:

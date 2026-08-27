@@ -6,7 +6,6 @@ from meddeid_core.language import LanguageProfile
 def test_language_profile_contract_is_neutral_and_validates_tags():
     profile = LanguageProfile(
         profile_id="example-XX",
-        version="1",
         language_tags=("xx", "xx-YY"),
         post_process_spans=lambda spans, text, metadata: spans,
     )
@@ -20,11 +19,10 @@ def test_language_profile_contract_is_neutral_and_validates_tags():
 def test_language_profile_rejects_capability_for_another_profile():
     profile = LanguageProfile(
         profile_id="example-XX",
-        version="1",
         language_tags=("xx",),
         post_process_spans=lambda *args: [],
         capability_manifest_provider=lambda: {
-            "subannotation": {"profile_id": "other-YY", "profile_version": "1"}
+            "subannotation": {"profile_id": "other-YY"}
         },
     )
     with pytest.raises(RuntimeError, match="another profile"):

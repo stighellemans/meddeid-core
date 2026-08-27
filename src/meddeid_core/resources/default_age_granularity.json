@@ -1,0 +1,13 @@
+{
+  "schema_version": "meddeid.age-granularity.v1",
+  "policy_id": "meddeid-default",
+  "policy_version": "1",
+  "bands": [
+    {"until": {"value": 28, "unit": "day", "inclusive": true}, "output": ["day"]},
+    {"until": {"value": 90, "unit": "day", "inclusive": true}, "output": ["week", "day"]},
+    {"until": {"value": 6, "unit": "month", "inclusive": false}, "output": ["month", "week"]},
+    {"until": {"value": 24, "unit": "month", "inclusive": false}, "output": ["month"]},
+    {"until": {"value": 12, "unit": "year", "inclusive": false}, "output": ["year", "month"]},
+    {"output": ["year"]}
+  ]
+}
