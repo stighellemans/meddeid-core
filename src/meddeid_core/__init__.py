@@ -139,4 +139,4 @@ try:  # pragma: no cover
 except ImportError:  # pydantic not installed — core still works
     pass
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"

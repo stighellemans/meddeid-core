@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meddeid-core"
-version = "0.2.0"
+version = "0.2.1"
 description = "Language-neutral schema, taxonomy, and span contracts for MedDeID"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -20,8 +20,8 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://stighellemans.github.io/meddeid.github.io/"
-Documentation = "https://stighellemans.github.io/meddeid.github.io/concepts/data-contract/"
+Homepage = "https://stighellemans.github.io/meddeid/"
+Documentation = "https://stighellemans.github.io/meddeid/concepts/data-contract/"
 Source = "https://github.com/stighellemans/meddeid-core"
 Issues = "https://github.com/stighellemans/meddeid-core/issues"
 "MedDeID on Hugging Face" = "https://huggingface.co/collections/stighellemans/meddeid"

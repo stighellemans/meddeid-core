@@ -4,7 +4,7 @@
 suite: the document schema, 15-label data taxonomy, ordered 14-label model head,
 record normalization, and character-offset validation.
 
-The [suite documentation](https://stighellemans.github.io/meddeid.github.io/concepts/data-contract/)
+The [suite documentation](https://stighellemans.github.io/meddeid/concepts/data-contract/)
 explains how this contract moves through MedDeID workflows. This repository is
 the authority for the schema, taxonomy, label order, and offset rules.
 

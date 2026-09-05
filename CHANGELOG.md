@@ -3,6 +3,12 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while pre-1.0 versions may still refine public contracts.
 
+## [Unreleased]
+
+## [0.2.1] - 2026-09-05
+
+- Refreshed citation metadata for the coordinated MedDeID suite 0.2.0 release.
+
 ## [0.2.0] - 2026-08-27
 
 - Updated onboarding guidance to use stable ruleset identities and package,
