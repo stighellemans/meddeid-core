@@ -232,6 +232,9 @@ def normalize_metadata(raw: Any) -> dict[str, Any]:
         return {} if raw is None else {"value": raw}
     meta = dict(raw)
 
+    if "name_replacement" in meta and type(meta["name_replacement"]) is not bool:
+        raise ValueError("metadata.name_replacement must be a boolean")
+
     retired = [key for key in _RETIRED_IDENTITY_KEYS if key in meta]
     if retired:
         raise ValueError(

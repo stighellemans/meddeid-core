@@ -58,6 +58,28 @@ all offsets remain absolute document offsets:
 }
 ```
 
+## Name replacement contract
+
+`DocumentMetadata.name_replacement` is a strict Boolean, default `False`.
+The untyped `normalize_metadata()` function rejects strings, numbers and null
+for this field too. The runtime uses `True` to replace `Name:Patient`,
+`Name:Caregiver` and `Name:Other`; `False` retains their original bracketed labels.
+
+Core owns `meddeid.name-spelling.v1`: normalized spelling and study scope are
+encoded deterministically and keyed with HMAC-SHA256. `NameCatalog` accepts
+language resources and renders titles, initials and names; core contains no
+name lists. Language packs provide the optional `LanguageProfile.replace_name()`
+hook, returning an unbracketed body or `None` for a safe label fallback.
+
+`name_configuration()` accepts a key of at least 32 bytes and a nonempty scope,
+or reads hexadecimal `MEDDEID_NAME_KEY` and `MEDDEID_NAME_SCOPE`. Keep these in
+protected deployment configuration, outside document metadata and shared output.
+Pin the algorithm and language resources along with the key and scope to retain
+aliases across workers, documents and retries. No person mapping database is
+required. Initial periods, Unicode normalization, case and whitespace normalize;
+`Mark Peters`, `M. Peters` and `Mark P.` remain different spellings. Aliases can
+collide and are not unique patient identifiers or reversible encryption.
+
 ## Normalize canonical JSONL
 
 The normalizer standardizes fields within records that use the canonical
