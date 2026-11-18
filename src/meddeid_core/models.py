@@ -134,6 +134,10 @@ class KnownValue(_Base):
 
 class DocumentMetadata(_Base):
     lang: str | None = None
+    name_replacement: bool = Field(
+        default=False, strict=True,
+        description="Replace detected names using the configured study key and language resources; false uses labels.",
+    )
     document_creation_date: str | None = Field(
         default=None,
         description="Reference date used to convert birthdates to generalized ages.",

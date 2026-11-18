@@ -39,6 +39,12 @@ class BirthDateVariantsProvider(Protocol):
     def __call__(self, value: str) -> tuple[str, ...]: ...
 
 
+class NameReplacementProvider(Protocol):
+    """Return the replacement body without brackets, or None for a label fallback."""
+
+    def __call__(self, text: str, *, key: bytes, scope: str) -> str | None: ...
+
+
 @dataclass(frozen=True)
 class LanguageProfile:
     profile_id: str
@@ -50,6 +56,7 @@ class LanguageProfile:
     capability_manifest_provider: CapabilityManifest | None = None
     date_replacement_provider: DateReplacementProvider | None = None
     birth_date_variants_provider: BirthDateVariantsProvider | None = None
+    name_replacement_provider: NameReplacementProvider | None = None
 
     def accepts_language(self, language_tag: str) -> bool:
         normalized = language_tag.strip().replace("_", "-").lower()
@@ -102,6 +109,11 @@ class LanguageProfile:
                 f"language profile {self.profile_id!r} does not support patient.birth_date"
             )
         return self.birth_date_variants_provider(value)
+
+    def replace_name(self, text: str, *, key: bytes, scope: str) -> str | None:
+        if self.name_replacement_provider is None:
+            return None
+        return self.name_replacement_provider(text, key=key, scope=scope)
 
     def manifest(self) -> dict[str, Any]:
         payload: dict[str, Any] = {

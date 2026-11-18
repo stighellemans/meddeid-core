@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meddeid-core"
-version = "0.2.1"
+version = "0.2.2"
 description = "Language-neutral schema, taxonomy, and span contracts for MedDeID"
 readme = "README.md"
 requires-python = ">=3.10"

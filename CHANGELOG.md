@@ -5,6 +5,9 @@ semantic versioning while pre-1.0 versions may still refine public contracts.
 
 ## [Unreleased]
 
+- Added the strict, default-off `metadata.name_replacement` Boolean and optional language-profile name provider.
+- Added study-scoped HMAC derivation and a resource-driven name renderer without per-person mapping state.
+
 ## [0.2.1] - 2026-09-05
 
 - Refreshed citation metadata for the coordinated MedDeID suite 0.2.0 release.

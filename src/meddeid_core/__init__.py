@@ -20,6 +20,7 @@ from .age_policy import (
     load_age_granularity_policy,
 )
 from .language import DateReplacement, LanguageProfile
+from .name_pseudonyms import NAME_ALGORITHM, name_configuration, name_digest, normalize_name_spelling
 from .onboarding import (
     ATTEMPT_RECORD_CONTRACT,
     BATCH_MANIFEST_CONTRACT,
@@ -70,6 +71,10 @@ __all__ = [
     "onboarding",
     "LanguageProfile",
     "DateReplacement",
+    "NAME_ALGORITHM",
+    "name_configuration",
+    "name_digest",
+    "normalize_name_spelling",
     "ProfileRef",
     "GenerationTarget",
     "AttemptRecord",
@@ -139,4 +144,4 @@ try:  # pragma: no cover
 except ImportError:  # pydantic not installed — core still works
     pass
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
